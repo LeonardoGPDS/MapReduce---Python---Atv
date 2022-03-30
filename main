@@ -1,0 +1,14 @@
+from mrjob.job import MRJob
+import re
+
+resultado = re.compile(r"[\w]+")
+
+class QuantidadeResultado(MRJob):
+    def mapper (self, _, linha):
+        for p in resultado.findall(linha):
+            yield p.lower(),1
+    def reducer(self,p,qtd):
+        yield p, sum(qtd)
+
+if __name__== "__main__":
+    QuantidadeResultado.run()
